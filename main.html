@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokkastan</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Imperial banner hung across the top; cycles slogans (script.js) -->
+  <div id="slogans" class="banner-bar" aria-hidden="true">
+    <span id="banner-text" class="banner-text"></span>
+  </div>
+
+  <!-- Surveillance sidebar (left) -->
+  <aside id="watch-sidebar" class="sidebar sidebar-left" aria-hidden="true">
+    <div class="watch-head">
+      <img id="bigpokka-img" class="bigpokka" alt="big pokka" />
+      <h2 class="watch-title">BIG POKKA IS WATCHING</h2>
+    </div>
+    <div class="decrees">
+      <h3 class="decrees-title">Sausage Preservation Act</h3>
+      <ol id="decree-list" class="decree-list"></ol>
+    </div>
+  </aside>
+
+  <!-- State propaganda sidebar (right, populated by script.js) -->
+  <aside id="sidebar" class="sidebar sidebar-right" aria-hidden="true">
+    <div class="sidebar-head">
+      <span class="sidebar-kicker">Ministry of Truth</span>
+      <h2 class="sidebar-title">POKKASTAN STATE NEWS</h2>
+    </div>
+    <div id="news-feed" class="news-feed"></div>
+  </aside>
+
+  <!-- Background music -->
+  <audio id="bgm" loop></audio>
+
+  <!-- Global jumpscare overlay -->
+  <div id="jumpscare" class="jumpscare hidden">
+    <img id="jumpscare-img" alt="" />
+  </div>
+
+  <!-- ===================== SCREEN 0: START ===================== -->
+  <section id="screen-start" class="screen active">
+    <div class="center-stack">
+      <h1 class="title">POKKASTAN</h1>
+      <p class="subtitle">A trial in three parts.</p>
+      <button id="start-btn" class="big-btn">Click to Start</button>
+      <p class="hint">(sound on, headphones recommended)</p>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 1: CHASE ===================== -->
+  <section id="screen-chase" class="screen">
+    <!-- The chase playground -->
+    <div id="chase-stage" class="chase-stage">
+      <p id="chase-instructions" class="chase-instructions">Catch the Pokka. Click him.</p>
+      <div id="chase-taunt" class="chase-taunt"></div>
+      <img id="chase-pokka" class="chase-pokka" alt="smug pokka" />
+    </div>
+
+    <!-- "too easy" interstitial -->
+    <div id="chase-tooeasy" class="center-stack hidden">
+      <img id="tooeasy-pokka" class="portrait" alt="smug pokka" />
+      <p class="speech big">too easy</p>
+      <button id="tooeasy-btn" class="big-btn">...continue?</button>
+    </div>
+
+    <!-- chloe rescue -->
+    <div id="chase-chloe" class="center-stack hidden">
+      <img id="chloe-chase-img" class="portrait" alt="chloe" />
+      <p class="speech">i disabled the jumpscare</p>
+      <button id="chloe-chase-btn" class="big-btn">Continue</button>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 2: QUIZ ===================== -->
+  <section id="screen-quiz" class="screen">
+    <div class="quiz-wrap">
+      <img id="magnus-img" class="portrait small" alt="magnus" />
+      <h2 class="title">placeholder quiz</h2>
+      <form id="quiz-form" class="quiz-form"></form>
+      <p id="quiz-feedback" class="feedback hidden"></p>
+      <button id="quiz-check" class="big-btn">check</button>
+    </div>
+  </section>
+
+  <!-- ===================== SCREEN 3: BLACKJACK ===================== -->
+  <section id="screen-blackjack" class="screen">
+    <p class="narration">and so you are here at the heart of pokkastan, but pokka will not be easily beaten, now we will fight to the e-death</p>
+
+    <div class="bj-layout">
+      <!-- Dealer / Pokka -->
+      <div id="dealer-zone" class="dealer-zone">
+        <img id="dealer-pokka" class="dealer-pokka" alt="pokka the dealer" />
+        <div id="pokka-speech" class="speech-bubble"></div>
+      </div>
+
+      <!-- Table -->
+      <div class="bj-table">
+        <div class="hand-row">
+          <span class="hand-label">Dealer (<span id="dealer-score">0</span>)</span>
+          <div id="dealer-cards" class="cards"></div>
+        </div>
+        <div class="hand-row">
+          <span class="hand-label">You (<span id="player-score">0</span>)</span>
+          <div id="player-cards" class="cards"></div>
+        </div>
+
+        <p id="bj-status" class="bj-status"></p>
+
+        <div class="bj-info">
+          <span>Chips: <b id="chips">100</b></span>
+          <span>Bet: <b id="bet">10</b></span>
+          <span>Losses: <b id="losses">0</b></span>
+        </div>
+
+        <div class="bj-controls">
+          <button id="bj-deal" class="bj-btn">Deal</button>
+          <button id="bj-hit" class="bj-btn" disabled>Hit</button>
+          <button id="bj-stand" class="bj-btn" disabled>Stand</button>
+          <button id="bj-cheat" class="bj-btn cheat">Cheat</button>
+        </div>
+
+        <!-- Shop (revealed after 3 losses) -->
+        <div id="bj-shop" class="bj-shop hidden">
+          <h3>Pokka's Shop</h3>
+          <div class="shop-item">
+            <img id="shop-sausage" class="shop-sausage" alt="sausage" />
+            <span>Sausage - <b>20</b> chips</span>
+            <button id="buy-sausage" class="bj-btn">Buy</button>
+          </div>
+        </div>
+
+        <!-- Sausage to drag onto pokka -->
+        <div id="drag-zone" class="drag-zone hidden">
+          <p>He wants it. Drag the sausage to Pokka.</p>
+          <img id="drag-sausage" class="drag-sausage" alt="sausage" draggable="true" />
+        </div>
+      </div>
+    </div>
+
+    <div id="banished" class="banished hidden">pokka is banished from the internet</div>
+    <button id="bj-to-ending" class="big-btn hidden">Continue</button>
+  </section>
+
+  <!-- ===================== ENDING ===================== -->
+  <section id="screen-ending" class="screen">
+    <div class="center-stack">
+      <img id="chloe-end-img" class="portrait" alt="chloe" />
+      <p class="ending-text">
+        congratulation, pokka has been banished from the internet, probably a good thing for him...
+        the files pokka eaten have been recovered. access it here
+        <a href="https://drive.google.com/drive/folders/15NL9o5wLH7NT6qMJ8ytdME8bbFYx6ely?usp=drive_link" target="_blank" rel="noopener">your recovered files</a>
+      </p>
+      <p class="hbd">happy birthday</p>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
