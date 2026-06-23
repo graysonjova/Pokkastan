@@ -222,23 +222,116 @@ $('#chloe-chase-btn').addEventListener('click', () => {
 });
 
 // ===================== SCREEN 2: QUIZ =====================
-const QUIZ_COUNT = 10;
-const CORRECT = 'a'; // all correct answers are option A
+const QUESTIONS = [
+  {
+    q: `When Luca swore he would kill Maris in the afterlife, what did she call him as she threatened to send him to "the afterlife of the afterlife"?`,
+    options: [`Little butcher`, `Wheel boy`, `Star monkey`, `Cross-eyed villain`],
+    correct: 1,
+  },
+  {
+    q: `What cover story did Yu give the Iron Web to explain why Zhen intervened in the duel beneath the Ashen Banner?`,
+    options: [
+      `That he was scouting Valeria's column upriver and got swept into the ash by sheer misfortune`,
+      `That he had acted alone against orders, and she demanded his disavowal be entered publicly into the record`,
+      `That she pushed him overboard, then dropped secret letters after him, so he was only chasing papers the river bore to the Banner`,
+      `That Li himself had sent him beneath the Banner to quietly test where Seraphina's true loyalty lay`,
+    ],
+    correct: 2,
+  },
+  {
+    q: `Which of the following is NOT a member of the Iron Web?`,
+    options: [`Yu Lusinor`, `Fortuna Sanctozen`, `Yuxian Ceros`, `Zhen Herstinos`],
+    correct: 1,
+  },
+  {
+    q: `Why did Sol Aquenor defect to Valeria?`,
+    options: [
+      `Valeria seized his ancestral lands and coerced House Aquenor into bending the knee`,
+      `He was secretly promised the imperial throne for himself once Maximus had fallen`,
+      `He judged Maximus too weak for the empire's dire hour, and trusted Valeria's vision to save it`,
+      `Zhen and the Iron Web uncovered his secrets and blackmailed him into changing sides`,
+    ],
+    correct: 2,
+  },
+  {
+    q: `Finish this quote: "Ash falls, ______"`,
+    options: [`and we are lost`, `yet we stand`, `and night comes`, `yet dawn waits`],
+    correct: 1,
+  },
+  {
+    section: `Part II: Faction Tactical Doctrine`,
+    q: `What sits at the center of Gladelander doctrine, the true source of their attritional power?`,
+    options: [
+      `Heavily armored sauropod war-platforms`,
+      `Battlefield healing through life magic`,
+      `Near-impervious vox crystal armor`,
+      `Overwhelming aerial dragon supremacy`,
+    ],
+    correct: 1,
+  },
+  {
+    q: `According to Zhen's analysis, what is the fundamental weakness of Marcher forces?`,
+    options: [
+      `Their cavalry is helpless on uneven or forested ground`,
+      `They rely on foreign mercenaries who break under pressure`,
+      `Their warriors are few and bred for war, making losses irreplaceable`,
+      `Their doctrine collapses the moment they lose air superiority`,
+    ],
+    correct: 2,
+  },
+  {
+    section: `Part III: Dramatis Personae`,
+    q: `The Night of the Iron Web founded the Straitlands intelligence agency. The surrendered guild masters had demanded that "neither blood nor gold be spilled from us," so how did Li Chrysoganos execute them?`,
+    options: [
+      `He had them quietly poisoned at a feast`,
+      `He had them drowned in Neasanos harbor`,
+      `He had them choked to death with iron strings`,
+      `He had them exiled aboard a doomed fleet`,
+    ],
+    correct: 2,
+  },
+  {
+    q: `What is Magnus Sanctozen's primary title?`,
+    options: [`The Steel Princess`, `The Life-Giver Prince`, `The Prince of Eclipse`, `The Iron Duke`],
+    correct: 2,
+  },
+  {
+    q: `Which of the following is NOT called Wyvernfall?`,
+    options: [
+      `Zhen's fiefdom, which he won after the Equinox War`,
+      `A play about the Equinox War centering on Yue and Qian`,
+      `The battle in which Erdeni's father, Altai Arslan, fell`,
+      `The site where the peace treaty ending the Equinox War was signed`,
+    ],
+    correct: 3,
+  },
+];
+
+const QUIZ_COUNT = QUESTIONS.length;
+
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 
 function buildQuiz() {
   const form = $('#quiz-form');
   if (form.dataset.built) return;
-  const letters = ['a', 'b', 'c', 'd'];
+  const letters = ['A', 'B', 'C', 'D'];
   let html = '';
-  for (let i = 1; i <= QUIZ_COUNT; i++) {
-    html += `<fieldset class="quiz-q"><legend>quiz ${i}</legend>`;
-    for (const L of letters) {
-      html += `<label class="quiz-opt">
-        <input type="radio" name="q${i}" value="${L}" /> answer ${i}.${L}
-      </label>`;
+  QUESTIONS.forEach((item, idx) => {
+    const n = idx + 1;
+    if (item.section) {
+      html += `<h3 class="quiz-section">${escapeHtml(item.section)}</h3>`;
     }
+    html += `<fieldset class="quiz-q"><legend>Question ${n}</legend>`;
+    html += `<p class="quiz-question">${escapeHtml(item.q)}</p>`;
+    item.options.forEach((opt, oi) => {
+      html += `<label class="quiz-opt">
+        <input type="radio" name="q${n}" value="${oi}" /> ${letters[oi]}) ${escapeHtml(opt)}
+      </label>`;
+    });
     html += `</fieldset>`;
-  }
+  });
   form.innerHTML = html;
   form.dataset.built = '1';
 }
@@ -246,9 +339,9 @@ function buildQuiz() {
 $('#quiz-check').addEventListener('click', () => {
   const feedback = $('#quiz-feedback');
   let allCorrect = true;
-  for (let i = 1; i <= QUIZ_COUNT; i++) {
-    const sel = document.querySelector(`input[name="q${i}"]:checked`);
-    if (!sel || sel.value !== CORRECT) {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const sel = document.querySelector(`input[name="q${i + 1}"]:checked`);
+    if (!sel || Number(sel.value) !== QUESTIONS[i].correct) {
       allCorrect = false;
       break;
     }
